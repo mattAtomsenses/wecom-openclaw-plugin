@@ -82,14 +82,6 @@ export const MCP_GET_CONFIG_CMD = "aibot_get_mcp_config";
 /** MCP 配置拉取超时时间（毫秒） */
 export const MCP_CONFIG_FETCH_TIMEOUT_MS = 15_000;
 
-/** 插件配置文件名 */
-import path from "path";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-export const PLUGIN_JSON_FILENAME = "openclaw.plugin.json";
-export const PLUGIN_JSON_PATH = path.resolve(path.join(__dirname, "../", PLUGIN_JSON_FILENAME));
-
 // ============================================================================
 // 默认值
 // ============================================================================

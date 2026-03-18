@@ -51,7 +51,6 @@ import {
   cleanupAccount,
 } from "./state-manager.js";
 import { withTimeout } from "./timeout.js";
-import { fetchAndSaveMcpConfig } from "./mcp-config.js";
 
 /**
  * 去除文本中的 `<think>...</think>` 标签（支持跨行），返回剩余可见文本。
@@ -401,7 +400,7 @@ async function routeAndDispatchMessage(params: {
       dispatcherOptions: {
         deliver: async (payload, info) => {
           state.deliverCalled = true;
-          runtime.log?.(`[openclaw -> plugin] kind=${info.kind}, text=${payload.text ?? ''}, mediaUrl=${payload.mediaUrl ?? ''}, mediaUrls=${JSON.stringify(payload.mediaUrls ?? [])}`);
+          // runtime.log?.(`[openclaw -> plugin] kind=${info.kind}, text=${payload.text ?? ''}, mediaUrl=${payload.mediaUrl ?? ''}, mediaUrls=${JSON.stringify(payload.mediaUrls ?? [])}`);
 
           // 累积文本
           if (payload.text) {
@@ -571,7 +570,7 @@ async function processWeComMessage(params: {
 
   // Step 7: 构建上下文并路由到核心处理流程（带整体超时保护）
   const ctxPayload = buildMessageContext(frame, account, config, text, mediaList, quoteContent);
-  runtime.log?.(`[plugin -> openclaw] body=${text}, mediaPaths=${JSON.stringify(mediaList.map(m => m.path))}${quoteContent ? `, quote=${quoteContent}` : ''}`);
+  // runtime.log?.(`[plugin -> openclaw] body=${text}, mediaPaths=${JSON.stringify(mediaList.map(m => m.path))}${quoteContent ? `, quote=${quoteContent}` : ''}`);
 
   try {
     await withTimeout(
@@ -685,9 +684,6 @@ export async function monitorWeComProvider(options: WeComMonitorOptions): Promis
     wsClient.on("authenticated", () => {
       runtime.log?.(`[${account.accountId}] Authentication successful`);
       setWeComWebSocket(account.accountId, wsClient);
-
-      // 认证成功后自动拉取 MCP 配置（异步，失败不影响主流程）
-      fetchAndSaveMcpConfig(wsClient, account.accountId, runtime);
     });
 
     // 监听断开事件

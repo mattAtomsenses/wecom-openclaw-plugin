@@ -48,7 +48,7 @@ export async function sendWeComReply(params: {
     REPLY_SEND_TIMEOUT_MS,
     `Reply send timed out (streamId=${streamId})`,
   );
-  runtime.log?.(`[plugin -> server] streamId=${streamId}, finish=${finish}, text=${text}`);
+  runtime.log?.(`[plugin -> server] streamId=${streamId}, finish=${finish}`);
 
   return streamId;
 }
