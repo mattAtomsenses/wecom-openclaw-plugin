@@ -83,6 +83,14 @@ const plugin = {
   register(api: OpenClawPluginApi) {
 
     setWeComRuntime(api.runtime);
+
+    // Skip channel registration if enterprise extension is present
+    // The enterprise plugin will import and extend wecomPlugin directly
+    if (process.env.WECOM_ENTERPRISE_EXTENSION === "true") {
+      console.log("[wecom] Enterprise extension detected, skipping channel registration");
+      return;
+    }
+
     api.registerChannel({ plugin: wecomPlugin });
 
     // 注册 wecom_mcp：通过 HTTP 直接调用企业微信 MCP Server
@@ -110,3 +118,5 @@ const plugin = {
 };
 
 export default plugin;
+export { wecomPlugin } from "./src/channel.js";
+export { setWeComRuntime, getWeComRuntime } from "./src/runtime.js";
